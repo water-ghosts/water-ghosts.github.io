@@ -286,6 +286,8 @@ If you multiply all data points by c, then `Z(d) = c * (d-µ) / c * σ`. The dif
 
 (There's a bit of nuance to these findings. Note that if `c` is 0, the new standard deviation will be 0, and the Z scores will be undefined. Also note that if `c` is negative, then the Z Scores will change sign.)
 
+### Linear Transformations
+
 Let's define a "Linear Transformation" as any combination of 1) Adding or subtracting a constant and 2) Multiplying or dividing by a positive constant. What we've just shown that if two data sources are linear transformations of each other, they'll have the same Z Scores (and if the scaling factor is negative, the Z Scores will simply have opposite signs [Note: I feel like I should demonstrate this explicitly])
 
 This is why you can convert data from different temperature scales, even if the scale is something random I made up! As long as one is a linear transformation of the other, we can standardize the units and simplify our lives. This is especially useful because Standardizing the data via Z Scores is itself a linear transformation, subtracting µ and multiplying by 1/σ. This means that `Z(Z(Z(data))) == data`, and this process is stable (or idempotent if you prefer that term).
