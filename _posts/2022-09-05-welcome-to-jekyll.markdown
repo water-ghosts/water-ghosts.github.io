@@ -304,8 +304,6 @@ We've now demonstrated our first important property: Adding a constant to all da
 
 ### Demonstration 2: mean(data * m) = mean(data) * m
 
-# Demo 2: mean(data * c) == mean(data) * c
-
 Multiplying every data point by a constant will also multiply the mean by that constant. We'll demonstrate this in the same way:
 
 ```python
@@ -426,7 +424,7 @@ This is why you can convert data from different temperature scales, even if the 
 
 Note, however, that Z Scores are **not** preserved across *non*linear transformations. For example, Z([1,2,3]) is very different from Z([1,4,9]).
 
-### Mean = 0, S.D = 1
+### Mean is 0, Standard Deviation is 1
 
 Beyond serving as a universal unit translator, our Standardized Z Scores have another nice property. Let's take another look at the formula:
 
