@@ -22,7 +22,7 @@ title: Let's Do Some Stats
 email: eli.m.youngs@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Writing about statistics. This is very much a work in progress
-baseurl: "/blog" # the subpath of your site, e.g. /blog
+baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://water-ghosts.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  water-ghosts
 
