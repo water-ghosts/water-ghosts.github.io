@@ -46,7 +46,7 @@ There's an intuitive logic to Mode, since it answers the question "If we picked 
 
 Mode can also be extremely sensitive to small variations, since it's an all-or-nothing measurement. The series `[1, 1, 999.999, 1000]` can see its Mode increase three orders of magnitude if you nudge the third data point. If you're working with imprecise floating point math, the Mode might depend on whether this rounds to 1000 or 1000.0000000000001. Alternately, the Mode might not change at all, since it's unclear how this definition breaks ties. Meanwhile, if your dataset is `[1, 1, x]`, then no value of x can ever change the mode, whether it's 1, 2, or 2 trillion.
 
-Mode can be useful when categorizing numbers where the magnitude and order are irrelevant (e.g. phone numbers, serial numbers, and IDs). But outside of that narrow context, Mode mostly offers countless ways to lie with statistics. If you hear someone say "the modal outcome is X", exercise the same caution you would when a salesman extols a used car. Clearly, we need something better.
+Mode can be useful when categorizing numbers where the magnitude and order are irrelevant (e.g. summarizing telephone numbers by the most common area code). But outside of that narrow context, Mode mostly offers countless ways to lie with statistics. If you hear someone say "the modal outcome is X", exercise the same caution you would when a salesman extols a used car. Clearly, we need something better.
 
 ### Median
 
@@ -114,8 +114,7 @@ def variance(data):
     return mean([(d - µ)**2 for d in data])
 ```
 
-Note that Variance is never less than 0; since every deviation from the mean is squared, no component will ever be negative, so the average must be nonnegative as well (nonreal datasets are far outside our scope).
-Also note that this squaring causes outliers (extremely atypical data points) to have extreme effects. This turns out to be a feature, not a bug, and the reasons might be more intuitive than you expect. For example, 99.9% of lottery players have the same outcome (they lose), but playing the lottery is still an extremely high variance activity; a few players make millions!
+Note that Variance is never less than 0; since every deviation from the mean is squared, no component will ever be negative, so the average must be nonnegative as well (nonreal datasets are far outside our scope). Also note that this squaring causes outliers (extremely atypical data points) to have extreme effects. This turns out to be a feature, not a bug, and the reasons might be more intuitive than you expect. For example, 99.9% of lottery players have the same outcome (they lose), but playing the lottery is still an extremely high variance activity; a few players make millions!
 
 ### Wait, shouldn't the denominator be...?
 
