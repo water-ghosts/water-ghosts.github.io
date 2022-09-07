@@ -106,7 +106,7 @@ As with centrality, there are multiple ways to approach this. We could report on
 
 We could measure the total deviation of all data points from the mean, but this wouldn't mean much on its own; a total temperature deviation of 30 degrees C means something very different if your time horizon is three hours vs three years. We can't solve this by taking the average, since the average deviation from the mean will always be 0 (don't worry if this isn't immediately obvious; we'll demonstrate why it is in a few minutes). 
 
-The simplest solution is to take the absolute value of each deviation, so `[-1500, 0, 1500]` would have a total deviation of 3000 and an average absolute deviation of 1000 `(3000 / 3)`. This is by no means a bad approach, but the absolute value function is still a bit messier than we'd like; it's mostly continuous, but it doesn't have a well-defined derivative at its minimum point. We could probably make things work despite that problem, but instead we've traditionally chosen to *square* each deviation from the mean. This is called variance, and it gives our `[-1500, 0, 1500]` data an average squared deviation of 1,500,000 `(4,500,000 / 3)` .
+The simplest solution is to take the absolute value of each deviation, so `[-1500, 0, 1500]` would have a total deviation of 3000 and an average absolute deviation of 1000 `(3000 / 3)`. This is by no means a bad approach, but the absolute value function is still a bit messier than we'd like; it's mostly continuous, but it doesn't have a well-defined derivative at its minimum point. We could probably make things work despite that problem, but instead we've traditionally chosen to *square* each deviation from the mean (there may be a deeper reason for this, but to the best of my knowledge it's mostly just convention). This is called variance, and it gives our `[-1500, 0, 1500]` data an average squared deviation of 1,500,000 `(4,500,000 / 3)` .
 
 ```python
 def variance(data):
@@ -115,7 +115,7 @@ def variance(data):
 ```
 
 Note that Variance is never less than 0; since every deviation from the mean is squared, no component will ever be negative, so the average must be nonnegative as well (nonreal datasets are far outside our scope).
-Also note that this squaring causes outliers (extremely atypical data points) to have extreme effects. This turns out to be a feature, not a bug, and might be intuitive than you expect. For example, 99.9% of lottery players have the same outcome (they lose), but playing the lottery is still an extremely high variance activity; a few players make millions!
+Also note that this squaring causes outliers (extremely atypical data points) to have extreme effects. This turns out to be a feature, not a bug, and the results might be more intuitive than you expect. For example, 99.9% of lottery players have the same outcome (they lose), but playing the lottery is still an extremely high variance activity; a few players make millions!
 
 ### Wait, shouldn't the denominator be...?
 
