@@ -115,7 +115,7 @@ def variance(data):
 ```
 
 Note that Variance is never less than 0; since every deviation from the mean is squared, no component will ever be negative, so the average must be nonnegative as well (nonreal datasets are far outside our scope).
-Also note that this squaring causes outliers (extremely atypical data points) to have extreme effects. This turns out to be a feature, not a bug, and the results might be more intuitive than you expect. For example, 99.9% of lottery players have the same outcome (they lose), but playing the lottery is still an extremely high variance activity; a few players make millions!
+Also note that this squaring causes outliers (extremely atypical data points) to have extreme effects. This turns out to be a feature, not a bug, and the reasons might be more intuitive than you expect. For example, 99.9% of lottery players have the same outcome (they lose), but playing the lottery is still an extremely high variance activity; a few players make millions!
 
 ### Wait, shouldn't the denominator be...?
 
