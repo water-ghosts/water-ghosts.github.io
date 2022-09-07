@@ -11,17 +11,17 @@ We now have a measure of centrality and a measure of spread. Together, these do 
 
 ## Coefficient of Variation
 
-Suppose we take two measures of people's heights: `[175, 175, 185, 185]` and `[1.75, 1.75, 1.85, 1.85]`. These represent the same data in centimeters and meters respectively. The first dataset has a mean of 180 cm and a standard deviation of 5 cm, while the second has a mean of 1.8 m and a standard deviation of 0.05 m. In both cases, we can divide the standard deviation by the mean to get the uninspiringly named Coefficient of Variation, which works out to around 0.278 either way. Note that this number is unitless, since the units in the numerator and denominator cancel out.
+Suppose we take two measures of people's heights: `[175, 175, 185, 185]` and `[1.75, 1.75, 1.85, 1.85]`. These represent the same data in centimeters and meters respectively. The first dataset has a mean of 180 cm and a standard deviation of 5 cm, while the second has a mean of 1.8 m and a standard deviation of 0.05 m. In both cases, we can divide the standard deviation by the mean to get the (generically named) Coefficient of Variation, which works out to around 0.278 either way. Note that this number is unitless, since the units in the numerator and denominator cancel out.
 
-Unfortunately, this doesn't generalize as well as we'd like. Suppose a European measures the temperatures `[10, 20, 30, 40, 50, 60, 70]`, while an American measures `[50, 68, 86, 104, 122, 140, 158]`. Like the height examples, these represent the same observations in Celsius and Fahrenheit respectively, with the conversion factor `F = C * 1.8 + 32`. But while the Celsius temperatures have a mean of 40 and a standard deviation of 20, the Fahrenheit temperatures have a mean of 104 and a standard deviation of 36. Despite measuring the exact same temperatures, these datasets have different Coefficients (0.5 vs 0.346); even our unitless ratio depends on what units we use. The real solution is to settle on one temperature scale, but while we try to convince the Americans to change their dumb units, they're busy making first contact. The aliens beam down their own corresponding measurements in Degrees Quarblax, with a mean of 8.1 * 10^700 and a standard deviation of 3. Is the situation hopeless? Can we ever bridge the gap between our kinds?
+Unfortunately, this doesn't generalize as well as we'd like. Suppose a European measures the temperatures `[10, 20, 30, 40, 50, 60, 70]`, while an American measures `[50, 68, 86, 104, 122, 140, 158]`. Like the height examples, these are the same temperatures in Celsius and Fahrenheit respectively, with the conversion factor `F = C * 1.8 + 32`, but the Celsius temperatures have a mean of 40 and a standard deviation of 20, while the Fahrenheit temperatures have a mean of 104 and a standard deviation of 36. Despite measuring the exact same temperatures, these datasets have different Coefficients of Variance (0.5 vs 0.346). Even our unitless ratio depends on what units we use! The real solution is to settle on one temperature scale, but while we try to convince the Americans to change their dumb units, they're busy making first contact. The aliens beam down their own corresponding measurements in Degrees Quarblax, with a mean of 8.1 * 10^700 and a standard deviation of 3. Is the situation hopeless? Can we ever bridge the gap between our kinds?
 
 ## Standardization
 
-Thankfully, we have a universal translator. We can convert these datasets to Z-Scores, a term that's ironically lost in translation itself; the Z stands for Zentrum, German for Center, as in the Central (or Normal) Distribution. I'd like to call the process of converting numbers to their respective Z Scores "normalizing", but that name is overloaded, and typically means scaling numbers to between 0 and 1. Instead, since these scores are sometimes called Standard Scores, we can call this process Standardizing. Alternately, if it's a better mnemonic, we can call it Centralizing (Zentralizing?)
+Thankfully, we have a universal translator. We can convert these datasets to Z-Scores, a term that's ironically lost in translation itself. The Z stands for Zentrum, German for Center, and comes from the Central (or Normal) Distribution, which we'll discuss a few chapters from now. It's tempting to call the process of converting numbers to their respective Z Scores "normalizing", but that name is overloaded, and typically means scaling numbers to between 0 and 1. Instead, since these scores are sometimes called Standard Scores, we can call this process Standardizing.
 
-Whatever we call it, the idea is to express each data point as the number of standard deviations it is from the mean. The Celsius temperatures `[10, 20, 30, 40, 50, 60, 70]` have a mean of 40 and a standard deviation of 20, which means the first temperature of `10` is -30 degrees from the mean. 30 is equal to 1.5 standard deviations, so this data point's Z Score is -1.5. The fully standardized form of these temperatures works out to `[-1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5]`. 
+Whatever we call it, the idea is to express each data point as the number of standard deviations it is from the mean. The Celsius temperatures `[10, 20, 30, 40, 50, 60, 70]` have a mean of 40 and a standard deviation of 20, which means the first temperature of `10` is -30 degrees from the mean. 30 is 1.5 standard deviations, so this data point's Z Score is -1.5. The fully standardized form of these temperatures works out to `[-1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5]`. 
 
-Meanwhile, since the Fahrenheit temperatures `[50, 68, 86, 104, 122, 140, 158]` have a mean of 104 and a standard deviation of 36, the first temperature of `50` is -54 from the mean, and 54 is... 1.5 standard deviations. The fully standardized form of these temperatures is *also* `[-1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5]`! And without even knowing the conversion ratio between Celsius, Fahrenheit, and Quarblax, I can rest assured that the standardized Quarblax measurements are *also* `[-1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5]`.
+Meanwhile, since the Fahrenheit temperatures `[50, 68, 86, 104, 122, 140, 158]` have a mean of 104 and a standard deviation of 36, the first temperature of `50` is -54 from the mean, and 54 is... 1.5 standard deviations. The standardized form of these temperatures is *also* `[-1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5]`! And without even knowing the conversion ratio between Celsius, Fahrenheit, and Quarblax, I can rest assured that the standardized Quarblax measurements will *also* be `[-1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5]`!
 
 ```python
 def z_scores(data):
@@ -30,59 +30,58 @@ def z_scores(data):
     return [(d - µ) / σ for d in data]
 ```
 
-This process not only simplify conversions, it lets us compare wildly different measurements by expressing everything as unitless, relative distances from means. Is an 80 degree temperature in Antartica more unusual than a -10 degree temperature in LA? If we know the mean and standard deviation of those distributions, we can standardize the scales, pick the relevant Z scores, and find out. If that sounds too straightforward, try this: is Elizabeth II older than Yao Ming is tall? This might seem unanswerable or even absurd but it's surprisingly just as straightforward! Pull some data on typical heights and ages, compute the means and standard deviations, convert Elizabeth's age and Ming's height to Z scores, and see whether Ming diverges more from a typical height than Elizabeth from a typical age! Even Zen koans tremble before the power we've unleashed.
+This process not only simplify conversions, it lets us compare wildly different measurements by expressing everything as unitless, relative distances from means. Is an 80 degree temperature in Antartica more unusual than a -10 degree temperature in LA? If we know the mean and standard deviation of those distributions, we can Standardize the scales, pick the relevant Z scores, and find out. If that's too straightforward, try this: is Elizabeth II older than Yao Ming is tall? This might seem unanswerable, or even absurd, but it's surprisingly just as straightforward. Pull some data on typical heights and ages, compute the means and standard deviations, convert Elizabeth's age and Ming's height to Z scores, and see whether Ming diverges more from a typical height than Elizabeth from a typical age!
 
 ## Demonstrations
 
-This makes for a good sales pitch, but it's probably not immediately clear why this works. How can we be sure Quarblax will cooperate if it uses numbers we've never even seen? For the rest of this chapter, I'd like to build up some useful properties of these metrics, with the hope of making these properties seem obvious and intuitive. 
+It's probably not immediately clear why this works. How can we trust that the Quarblax conversion will work if we've never even seen the data? For the rest of this chapter, I'd like to build up some useful properties of these metrics, with the hope of making these properties seem obvious and intuitive. 
 
-The traditional way to present this would be LaTeX-formatted algebra, but this formal presentation has some downsides. It's hard to check for mistakes, and unless you live and breath math, the formal syntax can be difficult to quickly parse and work with. Instead, with a bit of Python, we can make these demonstrations interactive, translating the mathematical notation into a form that, for a lot of us, is more comfortable. 
+The traditional way to present this would be LaTeX-formatted equations and rigorous algebra, but this formal presentation has some downsides. It's hard to check for mistakes, and unless you live and breath math, the formal syntax can be difficult to quickly parse and work with. Instead, with a bit of Python, we can make these demonstrations interactive, translating the mathematical notation into a form that, for a lot of us, is more comfortable. 
 
 This won't be nearly as robust as formal proofs, but if you're just trying to get comfortable with an idea and explore, I find it an invaluable way to build up intuition and confidence. In lieu of the term "Proof", I'll call these code examples "Demonstrations".
 
 ### Demonstration 1: mean(data + c) = mean(data) + c
 
-This first demonstration may barely seem worth it, but it's a good way to get our feet wet with the technique. Let's start by doing our algebraic manipulation in Python, saving the intermediary steps to variables, and then validating that we didn't make a mistake by checking if all the variables stored the same result.
+[Note: I might split all this stuff into its own chapter so it doesn't interrupt the flow]
+
+This first demonstration may barely seem worth it, but it's a good way to get our feet wet with the technique. Let's start by doing our algebraic manipulation in Python, saving the intermediary steps to variables, and then validating that we didn't make a mistake by checking if all the variables store the same result.
 
 (We could use a library like Sympy to do symbolic algebra directly, but as soon as we go that route, we need to worry about setting up a dependency manager, downloading libraries, learning their APIs, and managing permissions and virtual environments and Python versions so we don't end up with this: https://xkcd.com/1987/. All this could become a huge barrier to entry, so let's keep things simple. Instead of manipulating symbols directly, we'll pick sample values to plug in and confirm these manipulations work.)
 
 ```python
-# Demo 1: mean(data + c) = mean(data) + c
-
 # First, we pick some arbitrary values [x, y, z] for our dataset
 x = 1.1
 y = 2.2
 z = 3.3
 
-# n is the length of our data
+# n is the length of our dataset
 n = 3
 
-# c is the constant we're adding to every data point (also arbitrary)
+# c is the arbitrary constant we add to every data point
 c = 4.4
 
 # Now we work through the algebra, saving each step to a variable.
-# I'm not sure why I started using s (maybe it's short for step?)
-# Feel free to use any other notation you find helpful
+# I like to use s (short for step?), but feel free to use any other notation you find helpful
 
 s0 = (x+c + y+c + z+c) / n   # Add a constant (c) to all values
 s1 = ((x+y+z) + (n*c)) / n   # Rearranging terms, this is the same as adding (c * n)
 s2 = (x+y+z)/n + (n*c)/n     # Note that (c * n) / n == c, since the n's cancel out
 s3 = mean([x,y,z]) + c       # So this simplifies to (x+y+z)/n + c , which is Mean + c
 
-# And now we print out the variables. 
-# If our steps were valid, this will be (almost) equal 
+# Finally, we print out the variables. 
+# If our steps were valid, these will be (more or less) equal 
 s0,s1,s2,s3 
 ```
 
 This is a starting point, but it leaves a lot to be desired. 
 
-Notice that I didn't end this snippet with something like `assert s0 == s1 and s2 == s3`. Unless you're reading this on a Burroughs Adding Machine, your phone/computer uses floating point math, which has inherently limited precision (there are a million resources on the internet that explain how floating point works with varying degrees of formality. This is one of the most accessible: https://www.youtube.com/watch?v=dQhj5RGtag0). The short version is that subtle changes in how you calculate the "same" value can lead to slightly different outcomes. The canonical example that usually trips up students is:
+Notice that I didn't end this snippet with something like `assert s0 == s1 and s2 == s3`. Unless you're reading this on a Burroughs Adding Machine, your phone or computer uses floating point math, which has limited precision (there are a million resources on the internet that explain how floating point works with varying degrees of formality. This is one of the most accessible: https://www.youtube.com/watch?v=dQhj5RGtag0). Subtle changes in how you calculate the "same" value can lead to slightly different outcomes, which makes comparing decimal values highly fraught. The canonical example that often trips up students is:
 
 ```python
-assert 0.1 + 0.2 == 0.3  # False! The left side will equal something like 0.30000000000000004
+assert 0.1 + 0.2 == 0.3  # False! The left side is 0.30000000000000004
 ```
 
-It's generally a bad idea to compare floating point values for equality, and some languages like Rust won't even let you. Instead, you should check that they're sufficiently close to each other. Let's write some helper functions so we don't have to print the numbers out and eyeball this:
+It's usually a bad idea to compare floating point values for equality (some languages, like Rust, won't even let you). Instead, you should check that they're sufficiently close to each other. Let's write some helper functions so we don't have to eyeball this:
 
 ```python
 def assert_equal(values):
@@ -94,11 +93,11 @@ def assert_equal(values):
     print(f"All values are equal: ~{values[0]}")
 ```
 
-This function will raise an error if any of the values are more than 0.00001 away from the first, then tell us which value failed. This isn't a general solution; if we're working with very small orders of magnitude, this will be trivially true, and if we're working across many orders of magnitude, it gets much trickier to define what precision we expect. There's a whole field of study around how to handle calculations like this with maximum precision, and I don't pretend to know the first thing about it. 
+This function will raise an error if any of the values are more than 0.00001 away from the first, then tell us which step of the comparison failed. This isn't a general solution; if we're working with very small orders of magnitude, this will be trivially true, and if we're working across many orders of magnitude, it's harder to define what precision we expect. There's a whole field of study around how to handle calculations like this with maximum precision, and I don't pretend to know the first thing about it. 
 
-So, how can we tell the difference between a harmless consequence of floating point precision and a debunking of our whole approach? We can't, and that's a very good reason not to use this approach to prove Fermat's Last Theorem.  That said, I think the benefits of this methodology in making the algebra feel visceral and immediate more than outweighs its weaknesses. We're not trying to formally prove statistics from scratch; we're trying to build intuition around what these formulas mean. 
+Given those limitations, how can we tell the difference between a harmless consequence of floating point precision and a debunking of our whole approach? We can't, and that's a good reason not to use this approach to prove Fermat's Last Theorem. That said, I think the benefits of making the algebra visceral and immediate more than outweigh the weaknesses, especially if we keep things in perspective. We don't want to formally prove statistics from scratch; we want to build intuition around what these formulas mean. 
 
-We can somewhat mitigate the risk by randomly selecting values instead of hardcoding them ourselves. We can constrain these values to limited orders of magnitude so our equality comparison works out, while adding enough noise in the form of negative numbers, decimal places, dataset length, etc to be sure we're not gerrymandering ourselves into success.
+We can somewhat mitigate the risk by randomly selecting values instead of hardcoding them ourselves. We can constrain these values to limited orders of magnitude so our equality comparison works out, while adding enough noise in the form of negative numbers, decimal places, and dataset length to be sure we're not gerrymandering ourselves into success.
 
 ```python
 import random
@@ -112,7 +111,7 @@ def random_value():
 def random_values(n=None):  # We can request a specific number of values if we want
     if n is None:
         n = random.randint(3, 50)
-    return [random_value() for _ in range(n)]
+    return [random_value() for _ in range(n)]  # _ is the conventional placeholder for an unused loop variable
 ```
 
 Putting this together, we get this cleaned-up demonstration:
@@ -152,7 +151,9 @@ s2 = mean([x,y,z]) + c/n    # I am extremely confident this is how math works.
 assert_equal([s0, s1, s2])  # Whoops! This throws an error!
 ```
 
-We can also make this even more general by operating on data of any size, rather than hardcoding this to three values.
+### Demonstration 1: mean(data + c) = mean(data) + c (Final Version)
+
+We can also make this more general by operating on data of any size, rather than hardcoding this to three values.
 
 ```python
 c = random_value()
@@ -172,7 +173,7 @@ We've now demonstrated our first important property: Adding a constant to all da
 
 ### Demonstration 2: mean(data * m) = mean(data) * m
 
-Multiplying every data point by a constant will also multiply the mean by that constant. We'll demonstrate this in the same way:
+Multiplying every data point by a constant will also scale the mean by that constant. We'll demonstrate this the same way:
 
 ```python
 # First, let's use this standard boilerplate to get our values
@@ -185,7 +186,7 @@ n = len(data)
 
 s0 = sum([d * c for d in data]) * 1/n  # Multiply each term by a constant (c)
 s1 = sum(data) * c * 1/n               # Factor out the constant
-s2 = mean(data) * c                    # The result is sum(data) * 1/n * c, which is Mean * c
+s2 = mean(data) * c                    # The result is sum(data) * 1/n * c, which is Mean(data) * c
 
 assert_equal([s0, s1, s2])
 ```
@@ -200,7 +201,7 @@ data = random_values()
 n = len(data)
 µ = mean(data)  # This is a legal name, but you can call it mu instead of µ if you prefer       
 
-# First, let's show that the sum of squared distances from the mean has this property
+# First, let's show that the sum of squared distances is unaffected by adding a constant
 
 s0 = sum([((d+c) - (µ+c))**2 for d in data])  # Adding c to all terms also adds c to the Mean (see Demo 1)
 s1 = sum([(d - µ + c - c)**2 for d in data])  # The terms and the Mean both shift by c, so relative distances are unchanged
@@ -232,17 +233,17 @@ data = [d-µ for d in data]
 µ = mean(data)  
 
 # After this processing step, the new mean will be 0 (see Demonstration 1)
-# while the stdev will be unchanged (see Demonstration 3)
+# while the stdev will be unchanged (Demonstration 3)
 assert_equal([µ, 0])
 assert_equal([stdev(data), stdev(original_data)])
 
 
 # Now that we've simplified our data set, let's multiply each term by a constant c. 
-# This will also multiply the Mean by c (see Demonstration 2)
+# This will also multiply the Mean by c (Demonstration 2)
 s0 = sum([(d*c - µ*c)**2 for d in data])
 
 # Since we've set µ to 0, we don't have to bother expanding this square.
-# This is simply (d*c - 0)**2 = d**2 * c**2
+# This is simply (d*c - 0)**2 = (d*c)**2 = d**2 * c**2
 s1 = sum([(d*c - 0)**2 for d in data])
 s2 = sum([d**2 * c**2 for d in data])
 
@@ -253,9 +254,10 @@ s3 = c**2 * sum([d**2 for d in data])
 assert_equal([s1,s2,s3])
 
 
-# Since the sum of squared distances scales by c**2, so does Variance
+# Since the sum of squared distances scales by c**2, so does Variance.
 # I'll reset the step counter to make it clear this is a new subproblem,
 # but feel free to do things differently
+
 s0 = c**2 * sum([(d-µ)**2 for d in data]) * 1/n  # This is the definition of Variance
 s1 = c**2 * variance(data)
 
@@ -274,25 +276,28 @@ s3 = stdev([d * c for d in original_data])
 assert_equal([s0, s1, s2, s3])
 ```
 
-You might need to read through that a few times or play around with it to follow all the steps, but again, the hope is that this is clearer than algebraic manipulation (or at least no worse).
+You might need to read through that a few times or play around with it to follow all the steps, but again, the hope is that this is clearer than algebraic manipulation (or at least not any worse).
 
 ### Redefining Z Scores
 
 Let's put these rules together. The definition of a Z Score is how far a data point is from the mean, expressed in units of standard deviation. So for any specific data point d, `Z(d) = (d - µ) / σ`.
 
-If you add a constant c to all data points, then `Z(d) = (d+c - µ+c) / (σ+0)`. The standard deviation is unchanged (Demonstration 3), and both d and µ shift by the same amount (Demonstration 1), so every individual data point's relative difference from the mean in standard deviations is unaffected. In other words, you can shift a dataset however you want without affecting its Z scores.
+If you add a constant c to all data points, then `Z(d) = (d+c - µ+c) / (σ+0)`. The standard deviation is unchanged (Demonstration 3), and both d and µ shift by the same amount (Demonstration 1), so every individual data point's relative difference from the mean in standard deviations is unchanged. In other words, you can shift a dataset however you want without affecting its Z scores.
 
 If you multiply all data points by c, then `Z(d) = c * (d-µ) / c * σ`. The difference from the mean is scaled by c, and the standard deviation is also scaled by c. These two scaling factors cancel each other out, so you're left with the original ratio: `(d-µ) / σ`.  In other words, you can scale a dataset however you want without affecting its Z Scores.
 
 (There's a bit of nuance to these findings. Note that if `c` is 0, the new standard deviation will be 0, and the Z scores will be undefined. Also note that if `c` is negative, then the Z Scores will change sign.)
 
+[Note: I feel like the Z scores flipping signs isn't obvious. I might want to add another demonstration step]
+
+
 ### Linear Transformations
 
-Let's define a "Linear Transformation" as any combination of 1) Adding or subtracting a constant and 2) Multiplying or dividing by a positive constant. What we've just shown that if two data sources are linear transformations of each other, they'll have the same Z Scores (and if the scaling factor is negative, the Z Scores will simply have opposite signs [Note: I feel like I should demonstrate this explicitly])
+Let's define a "Linear Transformation" as any combination of 1) Adding or subtracting a constant and 2) Multiplying or dividing by a positive constant. What we've just shown is that if two data sources are linear transformations of each other, they'll have the same Z Scores (and when multiplying or dividing by a negative constant, the Z Scores will simply have opposite signs).
 
-This is why you can convert data from different temperature scales, even if the scale is something random I made up! As long as one is a linear transformation of the other, we can standardize the units and simplify our lives. This is especially useful because Standardizing the data via Z Scores is itself a linear transformation, subtracting µ and multiplying by 1/σ. This means that `Z(Z(Z(data))) == data`, and this process is stable (or idempotent if you prefer that term).
+This is why you can convert data from different temperature scales, even if the scale is something random we just made up! As long as one is a linear transformation of the other, we can standardize the units and simplify our lives. This is especially useful because Standardizing the data via Z Scores is itself a linear transformation, subtracting µ and multiplying by 1/σ. This means that `Z(Z(Z(data))) == Z(data)`. The process is stable, or idempotent if you prefer that term.
 
-Note, however, that Z Scores are **not** preserved across *non*linear transformations. For example, Z([1,2,3]) is very different from Z([1,4,9]).
+Note, however, that Z Scores are **not** preserved across *non*linear transformations. For example, the Z scores of `[1, 2, 3]` and `[1, 8, 27]` will be completely different, even though you can transform the first dataset into the second by cubing each value.
 
 ### Mean is 0, Standard Deviation is 1
 
@@ -307,15 +312,13 @@ def z_scores(data):
 
 Since µ is subtracted from each data point, the mean is shifted by the same amount, resulting in a mean of 0 (Demonstration 1). The mean is then scaled by 1/σ (Demonstration 2), but this is just `(µ-µ) * 1/σ`, which is `0 * 1/σ`, which is `0`.
 
-As for the standard deviation, subtracting µ has no effect (Demonstration 3), then multiplying by 1/σ scales the standard deviation down by 1/σ. That means the standard deviation of the Z Scores is `σ * 1/σ`, which is 1.
+As for the standard deviation, subtracting µ has no effect (Demonstration 3), but multiplying by 1/σ scales the standard deviation down by 1/σ. That means the standard deviation of the Z Scores is `σ * 1/σ`, which is 1.
 
 By converting data points into Z Scores, we not only translate the units, we also set the mean and standard deviation to 0 and 1 respectively. This can simplify a lot of equations. For example, you might have seen this nightmarish equation for the Normal Distribution.
 
 `1 / (σ * sqrt(2 * pi)) * e ** (-0.5 * (x - µ) / σ) ** 2)`
 
-Don't worry about what this means for now. We'll come back to this equation in the future, and show that it's much less intimidating than it appears. 
-
-What I want to demonstrate is that we already have a tool to make this tractable. Since we can translate any dataset we want into Z Scores, we can always set µ to 0 and σ to 1, simplifying this formula to:
+Don't worry about what this means for now. We'll come back to this equation in the future, and show that it's much less intimidating than it appears. What I want to demonstrate is that we already have a tool to make this more tractable. Since we can translate any dataset we want into Z Scores, we can always set µ to 0 and σ to 1, simplifying this formula to:
 
 `1 / (1 * sqrt(2 * pi)) * e ** (-0.5 * (x - 0) / 1) ** 2)`
 
@@ -323,6 +326,4 @@ or
 
 `1 / (sqrt(2 * pi)) * e ** (-0.5 * (x ** 2)`
 
-Yes, I know, this is still far from the most intuitive formula you've ever seen. But I hope this demonstrates the usefulness of Z scores in making life easier. Any time you see µ or σ in a formula, you should feel that formula calling out to you, begging you to Standardize your data, offering the promise of a better way.
-
-Thanks for joining me on this journey. Next time, we'll look into Correlation, and how our universal unit translator can help us define what it means for two variables to move in sync.
+Yes, I know, this is still far from the most intuitive formula you've ever seen, but I hope this demonstrates how Z scores can make our lives easier. Whenevr you see µ or σ in a formula, you should feel that formula calling out to you, begging you to Standardize your data, offering the promise of a better way.
