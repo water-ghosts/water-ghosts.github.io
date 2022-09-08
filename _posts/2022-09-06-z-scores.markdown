@@ -40,7 +40,7 @@ The traditional way to present this would be LaTeX-formatted equations and rigor
 
 This won't be nearly as robust as formal proofs, but if you're just trying to get comfortable with an idea and explore, I find it an invaluable way to build up intuition and confidence. In lieu of the term "Proof", I'll call these code examples "Demonstrations".
 
-### Demonstration 1: mean(data + c) = mean(data) + c
+### A Sample Demonstration: mean(data + c) = mean(data) + c
 
 [Note: I might split all this stuff into its own chapter so it doesn't interrupt the flow]
 
@@ -150,6 +150,8 @@ s2 = mean([x,y,z]) + c/n    # I am extremely confident this is how math works.
 
 assert_equal([s0, s1, s2])  # Whoops! This throws an error!
 ```
+
+So, once more, with feeling:
 
 ### Demonstration 1: mean(data + c) = mean(data) + c (Final Version)
 
