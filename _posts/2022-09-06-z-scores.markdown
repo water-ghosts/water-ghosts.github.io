@@ -151,7 +151,7 @@ s2 = mean([x,y,z]) + c/n    # I am extremely confident this is how math works.
 assert_equal([s0, s1, s2])  # Whoops! This throws an error!
 ```
 
-So, once more, with feeling:
+Now we're ready to do this for real.
 
 ### Demonstration 1: mean(data + c) = mean(data) + c (Final Version)
 
