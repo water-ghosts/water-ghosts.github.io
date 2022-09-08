@@ -134,10 +134,10 @@ Alternately, if you don't like the `s` variables, you can do this, but I find it
 
 ```python
 assert_equal([
-    (x+c + y+c + z+c) / n,
-    ((x+y+z) + (n*c)) / n,
-    (x+y+z)/n + (n*c)/n,
-    mean([x,y,z]) + c,
+    (x+c + y+c + z+c) / n,  # Add a constant (c) to all values
+    ((x+y+z) + (n*c)) / n,  # Rearranging terms, this is the same as adding (c * n)
+    (x+y+z)/n + (n*c)/n,    # Note that (c * n) / n == c, since the n's cancel out
+    mean([x,y,z]) + c,      # So this simplifies to (x+y+z)/n + c , which is Mean + c
 ])
 ```
 
