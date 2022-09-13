@@ -314,12 +314,12 @@ function doNothing() {
 square = loggingDecorator(square);
 doNothing = loggingDecorator(doNothing);
 
-square(5);    # Logs "Function call # 1"
-square(5);    # Logs "Function call # 2"
+square(5);    // Logs "Function call # 1"
+square(5);    // Logs "Function call # 2"
 
-doNothing();  # Logs "Function Call #1"
+doNothing();  // Logs "Function Call #1"
 
-square(5);    # Logs "Function call # 3"
+square(5);    // Logs "Function call # 3"
 ```
 
 ## Conclusion
