@@ -5,8 +5,6 @@ date:   2022-09-12 23:28:05 -0700
 categories: jekyll update
 ---
 
-# Higher Order Functions and Decorators
-
 ## First-Class Functions
 
 In some languages, functions are limited compared to other data types. For example, in C, you can put an array inside an array, or a struct inside a struct, but you can't define a function inside a function.
