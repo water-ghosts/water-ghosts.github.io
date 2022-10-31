@@ -134,7 +134,7 @@ If we're going to bring in linear algebra, let's not go halfway. Let's start ove
 
 ### Vector Addition
 
-![Vector](/images/Vectors.png)
+<img src="https://water-ghosts.github.io/blob/main/images/Vectors.png" width="800"/>
 
 To add two vectors together, simply add the components together. To demonstrate why this makes sense, recall that vectors can be interpreted as positions in space, with each value representing a distance along an axis.
 
@@ -356,7 +356,8 @@ By the Law of Cosines:
 
 In other words, if you divide the dot product of two vectors by the product of their magnitudes, the result is the cosine of the angle between them. If both vectors are the same, the angle between them is 0, and the cosine of 0 (the x position after 0 turns) is `cos(0) = (A•A / |A|^2) = 1`.
 
-[!Example](https://water-ghosts.github.io/blob/main/images/example.png)
+<img src="https://water-ghosts.github.io/blob/main/images/example.png" width="800"/>
+
 
 It's easy to get lost in the math, so let's see an example of how this works in practice. If we have two vectors, `[3, 4]` and `[5, -12]`, we can use this formula to calculate the cosine of the angle between them. We can then take the inverse of that cosine (also called the arc cosine, or acos) to get the angle itself. In this case, that angle is about τ/3 radians, or one-third of a turn.
 
