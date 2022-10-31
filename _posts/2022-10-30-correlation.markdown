@@ -1,15 +1,13 @@
 ---
 layout: post
 title:  "3) Covariance and Correlation"
-date:   2022-10-31 12:14:05 -0700
+date:   2022-10-30 00:14:05 -0700
 categories: jekyll update
 ---
 
-# Chapter 3: Covariance and Correlation
-
 In the first few chapters, we focused on how to summarize a single list of numbers, but we often want to summarize data on multiple dimensions and show how they relate to each other. For example, we might want to measure both heights and weights, or temperatures and latitudes, and see how one metric is (cor)related to the other.
 
-I won't try to motivate the whole concept of Correlation from scratch. We already have a rough, informal sense of what it should mean: Do increases in one measure correspond to increases in another, or are the two unrelated? `[1, 2, 3]` and `[4, 5, 6]` are correlated in a way that `[1, 2, 3]` and `[8, 1, 5]` are not. Ice cream sales are positively correlated with temperature increases, but toothpaste sales are not. If you tell me a city's latitude, I can make a decent guess about its average temperature, but not if you give me its longitude. You've probably seen a thousand of those Correlation <> Causation graphs,s o I won't belabor that point.
+I won't try to motivate the whole concept of Correlation from scratch. We already have a rough, informal sense of what it should mean: Do increases in one measure correspond to increases in another, or are the two unrelated? `[1, 2, 3]` and `[4, 5, 6]` are correlated in a way that `[1, 2, 3]` and `[8, 1, 5]` are not. Ice cream sales are positively correlated with temperature increases, but toothpaste sales are not. If you tell me a city's latitude, I can make a decent guess about its average temperature, but not if you give me its longitude. You've probably seen a thousand graphs illustrating why Correlation isn't Causation, so I won't belabor that point.
 
 But, mathematically, what exactly is correlation? Our goal is to find a useful mathematical way to express this concept and make our intuition more robust.
 
@@ -134,13 +132,13 @@ If we're going to bring in linear algebra, let's not go halfway. Let's start ove
 
 ### Vector Addition
 
-<img src="https://water-ghosts.github.io/blob/main/images/Vectors.png" width="800"/>
+<img src="/images/Vectors.png" width="800"/>
 
 To add two vectors together, simply add the components together. To demonstrate why this makes sense, recall that vectors can be interpreted as positions in space, with each value representing a distance along an axis.
 
 In the example above, A is the vector `[3, 0]` and B is the vector `[0, 4]`. If you walk 3 units along the X axis, then 4 units along the Y axis, you reach the position `(3, 4)`. This is the same result as if you had walked directly along C, the vector `[3, 4]`. When A, B, and C are vectors, we can represent this relationship as A + B = C.
 
-![Vector](/images/Vectors2.png)
+<img src="/images/Vectors2.png" width="800"/>
 
 For a more complex example, A is the vector `[6, 3]` and B is the vector `[-2, 1]`. The result of walking A then B is again the same as walking C, representing the vector `[6-2, 3+1]` or `[4, 4]`. Once again, we can express this as A + B = C.
 
@@ -148,11 +146,11 @@ For a more complex example, A is the vector `[6, 3]` and B is the vector `[-2, 1
 
 When describing vectors, the word "length" is somewhat ambiguous. We could say the vector `[3, 4]` has a length of 2, because it has two elements, but we might also want "length" to represent its total distance from the origin. To avoid ambiguity, we use the term "dimension" to refer to how many elements make up a vector, and "magnitude" to refer to its distance from the origin.
 
-The magnitude of C is represented as |C|, and in the first example above, |C| = |[3, 4]| = 5. Notice that A and B form two legs of a right triangle, with C as the hypotenuse. The Pythagorean Theorem tells us C must have magnitude 5, since `3^2 + 4^2 = 5^2`.
+The magnitude of C is represented as `|C|`, and in the first example above, `|C| = |[3, 4]| = 5`. Notice that A and B form two legs of a right triangle, with C as the hypotenuse. The Pythagorean Theorem tells us C must have magnitude 5, since `3^2 + 4^2 = 5^2`.
 
-In the second picture, |C| is sqrt(32), which is about 5.66. This is because A + B = C = [4, 4], and C can be thought of as the hypotenuse of a right triangle, where both sides have a length of 4. In this case, the Pythagorean Theorem tells us that `4^2 + 4^2 = 32 = |C|^2`, so |C| must be sqrt(32). 
+In the second picture, `|C|` is sqrt(32), which is about 5.66. This is because A + B = C = [4, 4], and C can be thought of as the hypotenuse of a right triangle, where both sides have a length of 4. In this case, the Pythagorean Theorem tells us that `4^2 + 4^2 = 32 = |C|^2`, so `|C| = sqrt(32)`. 
 
-This syntax might take some getting used to. Just remember that A + B = C does not mean that |A| + |B| = |C|. The first formula describes a destination, while the second describes the most direct route to get there. Just because you got somewhere doesn't mean you took the most efficient route!
+This syntax might take some getting used to. Just remember that `A + B = C` does not mean that `|A| + |B| = |C|`. The first formula describes a destination, while the second describes the most direct route to get there. Just because you got somewhere doesn't mean you took the most efficient route!
 
 ### Magnitude in other dimensions
 
@@ -162,7 +160,8 @@ Well, in one dimension, the magnitude of the vector `[x]` is simply x, since goi
 
 What if we have a three-dimensional vector, like `[3, 4, 12]`? Remember that this vector represents going 3 units along x, then 4 along y, then 12 along z, and that the x, y, and z directions are perpendicular to each other (for "short", x, y, and z are orthogonal). If we break this down into three components, `[3, 0, 0]`, `[0, 4, 0]` and `[0, 0, 12]`, the first two components represent walking 3 units along x, then 4 along y. Since the z direction isn't involved, this is the same as going `[3, 4]` on a two-dimensional plane. We already saw this vector above and showed that it had a magnitude of 5. The third component, `[0, 0, 12]`, is perpendicular to the whole x-y plane, and the first two components work out to traveling 5 units on the x-y plane. This means we can represent the combined vector as another right triangle, with legs of length 5 and 12. The total distance traveled will be `sqrt((sqrt(3^2 + 4^2))^2 + 12^2) = sqrt(3^2 + 4^2 + 12^2) = sqrt(5^2 + 12^2) = 13`. This might make more sense with a picture:
 
-[!3D](/images/3d.gif)
+<img src="/images/3D.gif"/>
+
 [TODO: I need to make my own image here.]
 
 If we add another orthogonal dimension, we can continue this line of thinking. The vector `[3, 4, 12, 17]` can be broken down into `[3, 4, 12, 0]` and `[0, 0, 0, 17]`, where the first vector represents traveling `sqrt(3^2 + 4^2 + 12^2) = 13` units in x-y-z space. If you travel 13 units, then turn and walk 17 units orthogonally, the Pythagorean Theorem describes your total distance in 4d space as `sqrt(13^2 + 17^2) = sqrt(3^2 + 4^2 + 12^2 + 17^2) ≈ 21.4`. This quickly becomes impossible to visualize, but the induction holds. For any dimension, the magnitude of a vector is the square root of the sum of the squares of its elements:
@@ -225,7 +224,7 @@ def magnitude(data):
 
 Stepping back into two dimensions, let's (re?)acquaint ourselves with some trigonometry.
 
-[!triangle](/images/tri0.png)
+<img src="/images/tri0.png" width="800"/>
 
 Consider a right triangle. One angle is 90 degrees, while another is represented as θ (theta). The three sides of the triangle are labeled A (**A**djacent to the angle θ), O (**O**pposite the angle θ), and H (the **H**ypotenuse). 
 
@@ -233,7 +232,7 @@ If you've taken a trig class, you probably learned the mnemonic "Soh-Cah-Toa". T
 
 If θ is 36 degrees, then the adjacent side A is about 81% as long as the hypotenuse, which is the same as saying `cos(θ) ≈ 0.81`. Note that this ratio doesn't depend on any actual lengths. If the hypotenuse is 100 feet, then the adjacent side is 81 feet. If the hypotenuse is 750 cm, then the adjacent side is 607.5 cm. This is because the value of θ completely determines the shape of the triangle. Since the angles in any triangle must add up to 180 degrees, these angles will always be 90, θ, and 90-θ (in this case, 90, 36, and 54 degrees). Since these angles are fixed, the shape of the triangle is also fixed. We can scale it to be larger or smaller, but without changing the angles, there's no way to change the relative lengths of the sides. 
 
-[!triangle](/images/tri1.png)
+<img src="/images/tri1.png" width="800"/>
 
 If we convert our units to "hypotenuse lengths", where the length of the hypotenuse itself is defined to be 1, the ratio `cos(θ) = Adjacent/Hypotenuse` becomes `cos(θ) = Adjacent/1`, or `Adjacent = cos(θ)`. By the same logic, `Opposite = sin(θ)`. By the Pythagorean Theorem, `sin(θ)^2 + cos(θ)^2 = 1^1 = 1`. 
 
@@ -247,7 +246,7 @@ Since the Pythagorean Theorem tells us `a^2 + o^2 = h^2` for any right triangle,
 
 ### Trigonometry is about circles
 
-[!triangle](/images/tri2.png)
+<img src="/images/tri2.png" width="800"/>
 
 We've been working with triangles, but it's often much more powerful to visualize these functions using a Unit Circle, so called because its radius is defined as 1 unit. 
 
@@ -255,7 +254,7 @@ By turning any angle θ and traveling 1 unit, we'll reach the edge of the circle
 
 ### A detour on measuring angles
 
-[!triangle](/images/tri3.png)
+<img src="/images/tri3.png" width="800"/>
 
 In everyday life, we usually measure angles in degrees; a rotation is 360 degrees, a quarter rotation is 90 degrees, etc. As you get deeper into math, you trade degrees for radians, and (try to) think of a rotation as 2π radians, a quarter rotation as π/2 radians, etc. 
 
@@ -269,7 +268,7 @@ If an angle represents a number of turns, the cosine of that angle represents th
 
 ### Cosines of Arbitrary Angles
 
-[!triangle](/images/tri4.png)
+<img src="/images/tri4.png" width="800"/>
 
 We started defining the Cosine as the ratio between sides of a right triangle, but this model has its limitations. On a right triangle, it doesn't make sense for one side to have zero length, or for an angle to be negative or more than τ/4 radians (90 degrees).
 
@@ -287,7 +286,7 @@ In this formula, capital `C` represents the angle between sides a and b, and opp
 
 ### The Law of Cosines for Obtuse Triangles
 
-[!triangle](/images/Obtuse.png)
+<img src="/images/Obtuse.png" width="800"/>
 
 To demonstrate the Law of Cosines on an obtuse triangle, imagine it's a subdivision of a hypothetical right triangle. 
 
@@ -310,7 +309,7 @@ Also by the Pythagorean Theorem:
 
 ### The Law of Cosines for Acute Triangles
 
-[!triangle](/images/Acute.png)
+<img src="/images/Acute.png" width="800"/>
 
 Similarly, we can think of an acute triangle as being made up of two right triangles. 
 
@@ -338,9 +337,9 @@ We've now shown that the Law of Cosines applies for all triangles, whether right
 
 ## Relating the Cosine and Dot Product
 
-[!Vector](/images/Vectors3.png)
+<img src="/images/Vectors3.png" width="800"/>
 
-Let's revisit an example from earlier. A and B are vectors, and C is the vector that results from traveling along A then B. This means that A + B = C, which can also be expressed as C = A - B. |C|^2 (the squared magnitude, or length, of C) can be represented as:
+Let's revisit an example from earlier. A and B are vectors, and C is the vector that results from traveling along A then B. This means that A + B = C, which can also be expressed as C = A - B. `|C|^2` (the squared magnitude, or length, of C) can be represented as:
 
 `|C|^2 = C•C` (Demonstrated earlier)
 `= (A-B)•(A-B)` (Substitute C = A - B)
@@ -356,8 +355,7 @@ By the Law of Cosines:
 
 In other words, if you divide the dot product of two vectors by the product of their magnitudes, the result is the cosine of the angle between them. If both vectors are the same, the angle between them is 0, and the cosine of 0 (the x position after 0 turns) is `cos(0) = (A•A / |A|^2) = 1`.
 
-<img src="https://water-ghosts.github.io/blob/main/images/example.png" width="800"/>
-
+<img src="/images/example.png" width="800"/>
 
 It's easy to get lost in the math, so let's see an example of how this works in practice. If we have two vectors, `[3, 4]` and `[5, -12]`, we can use this formula to calculate the cosine of the angle between them. We can then take the inverse of that cosine (also called the arc cosine, or acos) to get the angle itself. In this case, that angle is about τ/3 radians, or one-third of a turn.
 
