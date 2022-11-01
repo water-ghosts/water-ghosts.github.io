@@ -5,11 +5,15 @@ date:   2022-10-31 12:14:05 -0700
 categories: jekyll update
 ---
 
+(NOTE: I'm really not a fan of Github Pages. I had to wrestle with it forever just to get this page formatted in the vaguely readable state you see now, and this formatting is still a mess. I'm giving up on trying to clean this up further, because I'm very ready to move on from this chapter. In the long run, I'm going to make my own blog where I have more control over how things are formatted, and use LaTeX for math formatting. In the meantime, sorry for ugly parts of this are!)
+
 In the first few chapters, we focused on how to summarize a single list of numbers, but we often want to summarize data on multiple dimensions and show how they relate to each other. For example, we might want to measure both heights and weights, or temperatures and latitudes, and see how one metric is (cor)related to the other.
+
+## Motivation and Roadmap
 
 I won't try to motivate the whole concept of Correlation from scratch. We already have a rough, informal sense of what it should mean: Do increases in one measure correspond to increases in another, or are the two unrelated? `[1, 2, 3]` and `[4, 5, 6]` are correlated in a way that `[1, 2, 3]` and `[8, 1, 5]` are not. Ice cream sales are positively correlated with temperature increases, but toothpaste sales are not. If you tell me a city's latitude, I can make a decent guess about its average temperature, but not if you give me its longitude. You've probably seen a thousand graphs illustrating why Correlation isn't Causation, so I won't belabor that point.
 
-But, mathematically, what exactly is correlation? Our goal is to find a useful mathematical way to express this concept and make our intuition more robust.
+But, mathematically, what exactly is correlation? Our goal is to find a way to express this idea mathematically way and make our intuition more robust.
 
 Stats classes sometimes do this by defining a concept called Covariance, making you memorize a dozen covariance rules, then presenting Correlation as a special case of it. I don't love this approach, since I don't think it provides a strong foundation; covariance is wildly unintuitive and rarely used in practice. That said, it is useful to get some exposure to these terms and formulas, so I will go through this approach first. I'll quickly define Covariance, then show how Correlation is the Covariance of Standardized data.
 
@@ -29,7 +33,7 @@ This is not the definition your linear algebra professor would use, but the form
 
 The Dot Product is one way to multiply two vectors together, provided those vectors are of equal length. To compute it, multiply each element in the first vector with the corresponding element in the second, then take the sum of those products.
 
-For example, if X = [1,2,3] and Y = [4,5,6], the dot product X•Y is `1*4 + 2*5 + 3*6 = 4 + 10 + 18 = 32`. In Python:
+For example, if X = `[1, 2, 3]` and Y = `[4, 5, 6]`, the dot product X•Y is `1*4 + 2*5 + 3*6 = 4 + 10 + 18 = 32`. In Python:
 
 ```python
 def dot(x, y):
@@ -73,33 +77,31 @@ def covariance(x, y):
     return dot(shift(x), shift(y)) / len(x)
 ```
 
-Either way, this is difficult to motivate, and even harder to make intuitive. Here's my best effort: 
-
-Covariance is a way to measure whether high and low deviations from two means are associated with each other. If unusually high ice cream sales correspond with unusually high temperatures, then the covariance between ice cream sales and temperatures will be large, since you'll multiply two large values together. On the other hand, if there's no consistent association, then low values in one dataset will "dampen" the effect of high values in the other. This is easiest to see with examples:
+Either way, this is difficult to motivate, and even harder to make intuitive. Here's my best effort: Covariance is a way to measure whether high and low deviations from two means are associated with each other. If unusually high ice cream sales correspond with unusually high temperatures, then the covariance between ice cream sales and temperatures will be large, since you'll multiply two large values together. On the other hand, if there's no consistent association, then low values in one dataset will "dampen" the effect of high values in the other. This is easiest to see with examples:
 
 #### Perfect association (positive and negative)
 
-[-2, -1, 1, 2] and [-2, -1, 1, 2] have a covariance of 4+1+1+4 / 4 = 10 / 4 = 2.5
+`[-2, -1, 1, 2]` and `[-2, -1, 1, 2]` have a covariance of (4+1+1+4) / 4 = 10 / 4 = 2.5
 
-[-2, -1, 1, 2] and [2, 1, -1, -2] have a covariance of -4-1-1-4 / 4 = -10 / 4 = -2.5
+`[-2, -1, 1, 2]` and `[2, 1, -1, -2]` have a covariance of (-4-1-1-4) / 4 = -10 / 4 = -2.5
 
 #### Weaker associations
 
-[-2, -1, 1, 2] and [-2, -1, 2, 1] have a covariance of 4+1+2+2 / 4 = 9 / 4 = 2.25
+`[-2, -1, 1, 2]` and `[-2, -1, 2, 1]` have a covariance of (4+1+2+2) / 4 = 9 / 4 = 2.25
 
-[-2, -1, 1, 2] and [-1, -2, 2, 1] have a covariance of 2+2+2+2 / 4 = 8 / 4 = 2
+`[-2, -1, 1, 2]` and `[-1, -2, 2, 1]` have a covariance of (2+2+2+2) / 4 = 8 / 4 = 2
 
 #### No association
 
-[-2, -1, 1, 2] and [1, -2, 2, -1] have a covariance of -2+2+2-2 / 4 = 0 / 4 = 0
+`[-2, -1, 1, 2]` and `[1, -2, 2, -1]` have a covariance of (-2+2+2-2) / 4 = 0 / 4 = 0
 
-[-2, -1, 1, 2] and [0, 0, 0, 0] also have a covariance of 0+0+0+0 / 4 = 0
+`[-2, -1, 1, 2]` and `[0, 0, 0, 0]` also have a covariance of (0+0+0+0) / 4 = 0
 
 ### Unit Confusion
 
 Unfortunately, any intuition falls apart when we introduce units. If I record the prices and areas of apartments, the covariance between these metrics isn't price *per* square foot, but price *times* square foot. The covariance between 6 feet and 2 yards is 12 foot-yards.
 
-Even when the units appear to make sense, this is often a mirage. Say we have a set of square tables. If their widths and lengths in meters are both `[1, 2, 3, 4, 5]`, then the covariance between width and length is 2 m^2. That might seem like a sensible value, but it's not the average area of the tables (which is 11 m^2) or the average deviation from that area (which is 0 m^2). It's... the average of the products of each table's differences from the *average* width and length. 
+Even when the units appear to make sense, this is often a mirage. Say we have a set of square tables. If their widths and lengths in meters are both `[1, 2, 3, 4, 5]`, then the covariance between width and length is 2 m^2. That might seem like a sensible value, but it's not the average area of the tables (which is 11 m^2) or the average deviation from that area (which is 0 m^2). It's... the average of the products of each table's differences from the *average* width and length. Confused yet?
 
 Imagine you don't have the original data, and you didn't just read the definition of covariance two minutes ago, and I tell you the covariance between two measurements is 2 m^2. How would you try to interpret that? Is that high? Low? Can you visualize it in a way that's not actively misleading? Would you ever guess the underlying measurements were the same?
 
@@ -109,7 +111,7 @@ If this seems hopeless, remember that Z Scores act as a universal unit translato
 
 The covariance calculation already subtracts the mean from each data point. If we do that ourselves beforehand, the covariance formula will just subtract 0 (the tautological average distance from the mean) so the overall result will be the same. 
 
-As for dividing by standard deviation, remember that X•(c * Y) = c * (X•Y). Since covariance is just a dot product divided by n, this also means that `cov(X, c*Y) = n * X•(c*Y) = c * n * X•Y = c * cov(X, Y)`. In other words, dividing all data points in x by `stdev(x)` will also divide the resulting covariance by `stdev(x)`, and doing the same for y will also divide the covariance by `stdev(y)`, so the final result will be divided by the product `stdev(x) * stdev(y)`.
+As for dividing by standard deviation, remember that `X•(c * Y) = c * (X•Y)`. Since covariance is just a dot product divided by n, this also means that `cov(X, c*Y) = n * X•(c*Y) = c * n * X•Y = c * cov(X, Y)`. In other words, dividing all data points in x by `stdev(x)` will also divide the resulting covariance by `stdev(x)`, and doing the same for y will also divide the covariance by `stdev(y)`, so the final result will be divided by the product `stdev(x) * stdev(y)`.
 
 This gives us two ways to express the same definition:
 
@@ -149,25 +151,27 @@ For a more complex example, A is the vector `[6, 3]` and B is the vector `[-2, 1
 
 When describing vectors, the word "length" is somewhat ambiguous. We could say the vector `[3, 4]` has a length of 2, because it has two elements, but we might also want "length" to represent its total distance from the origin. To avoid ambiguity, we use the term "dimension" to refer to how many elements make up a vector, and "magnitude" to refer to its distance from the origin.
 
-The magnitude of C is represented as `|C|`, and in the first example above, `|C| = |[3, 4]| = 5`. Notice that A and B form two legs of a right triangle, with C as the hypotenuse. The Pythagorean Theorem tells us C must have magnitude 5, since `3^2 + 4^2 = 5^2`.
+The magnitude of C is represented as \|C\|, and in the first example above, `|C| = |[3, 4]| = 5`. Notice that A and B form two legs of a right triangle, with C as the hypotenuse. The Pythagorean Theorem tells us C must have magnitude 5, since `3^2 + 4^2 = 5^2`.
 
 In the second picture, `|C|` is sqrt(32), which is about 5.66. This is because A + B = C = [4, 4], and C can be thought of as the hypotenuse of a right triangle, where both sides have a length of 4. In this case, the Pythagorean Theorem tells us that `4^2 + 4^2 = 32 = |C|^2`, so `|C| = sqrt(32)`. 
 
 This syntax might take some getting used to. Just remember that `A + B = C` does not mean that `|A| + |B| = |C|`. The first formula describes a destination, while the second describes the most direct route to get there. Just because you got somewhere doesn't mean you took the most efficient route!
 
-### Magnitude in other dimensions
+### Magnitudes in other dimensions
 
 In two dimensions, the Pythagorean Theorem tells us that the magnitude of `[x, y]` is `sqrt(x^2 + y^2)`. But what about in other dimensions?
 
 Well, in one dimension, the magnitude of the vector `[x]` is simply x, since going `x` units in a direction means you're now `x` units away from where you started. We can express this incredibly uninteresting fact as `|x| = x = sqrt(x^2)`, for reasons which will become clear in a moment.
 
-What if we have a three-dimensional vector, like `[3, 4, 12]`? Remember that this vector represents going 3 units along x, then 4 along y, then 12 along z, and that the x, y, and z directions are perpendicular to each other (for "short", x, y, and z are orthogonal). If we break this down into three components, `[3, 0, 0]`, `[0, 4, 0]` and `[0, 0, 12]`, the first two components represent walking 3 units along x, then 4 along y. Since the z direction isn't involved, this is the same as going `[3, 4]` on a two-dimensional plane. We already saw this vector above and showed that it had a magnitude of 5. The third component, `[0, 0, 12]`, is perpendicular to the whole x-y plane, and the first two components work out to traveling 5 units on the x-y plane. This means we can represent the combined vector as another right triangle, with legs of length 5 and 12. The total distance traveled will be `sqrt((sqrt(3^2 + 4^2))^2 + 12^2) = sqrt(3^2 + 4^2 + 12^2) = sqrt(5^2 + 12^2) = 13`. This might make more sense with a picture:
+What if we have a three-dimensional vector, like `[3, 4, 12]`? Remember that this vector represents going 3 units along x, then 4 along y, then 12 along z. The x, y, and z directions are perpendicular to each other (for "short", x, y, and z are orthogonal). 
+
+If we break this vector into three components, `[3, 0, 0]`, `[0, 4, 0]` and `[0, 0, 12]`, the first two components represent walking 3 units along x, then 4 along y. Since the z direction isn't involved, this is the same as going `[3, 4]` on a two-dimensional plane, and this vector has a magnitude of 5. The third component, `[0, 0, 12]`, is perpendicular to the whole x-y plane, which means we can represent the combined vector as another right triangle, with legs of length 5 and 12. The total distance traveled will be `sqrt((sqrt(3^2 + 4^2))^2 + 12^2) = sqrt(3^2 + 4^2 + 12^2) = sqrt(5^2 + 12^2) = 13`. This might make more sense with a picture:
 
 <img src="/images/3D.gif"/>
 
 [TODO: I need to make my own image here.]
 
-If we add another orthogonal dimension, we can continue this line of thinking. The vector `[3, 4, 12, 17]` can be broken down into `[3, 4, 12, 0]` and `[0, 0, 0, 17]`, where the first vector represents traveling `sqrt(3^2 + 4^2 + 12^2) = 13` units in x-y-z space. If you travel 13 units, then turn and walk 17 units orthogonally, the Pythagorean Theorem describes your total distance in 4d space as `sqrt(13^2 + 17^2) = sqrt(3^2 + 4^2 + 12^2 + 17^2) ≈ 21.4`. This quickly becomes impossible to visualize, but the induction holds. For any dimension, the magnitude of a vector is the square root of the sum of the squares of its elements:
+If we add another orthogonal dimension, we can continue this line of thinking. The vector `[3, 4, 12, 17]` can be broken down into `[3, 4, 12, 0]` and `[0, 0, 0, 17]`, where the first vector represents traveling `sqrt(3^2 + 4^2 + 12^2) = 13` units in x-y-z space. If you travel 13 units, then turn and walk 17 units orthogonally, the Pythagorean Theorem describes your total distance in 4D space as `sqrt(13^2 + 17^2) = sqrt(3^2 + 4^2 + 12^2 + 17^2) ≈ 21.4`. This quickly becomes impossible to visualize, but the induction holds. For any dimension, the magnitude of a vector is the square root of the sum of the squares of its elements:
 
 ```python
 def magnitude(vector):
@@ -176,8 +180,17 @@ def magnitude(vector):
 
 ### Dot Product and Magnitude
 
-By this definition, if a vector V has the elements `[a, b, c, d, ...]`, then its magnitude is `sqrt(a^2 + b^2 + c^2 + d^2 + ...)`. Meanwhile, by the definition of a dot product, `V•V = a*a + b*b + c*c + d*d + ... = a^2 + b^2 + c^2 + d^2 + ...`. Put differently, the dot product of a vector with itself is equal to the vector's magnitude squared: `V•V = |V|^2`. 
+By this definition, if a vector V has the elements `[a, b, c, d, ...]`, then its magnitude is: 
 
+`sqrt(a^2 + b^2 + c^2 + d^2 + ...)` 
+
+Meanwhile, by the definition of a dot product: 
+
+`V•V = a*a + b*b + c*c + d*d + ... = a^2 + b^2 + c^2 + d^2 + ...` 
+
+Put differently, the dot product of a vector with itself is equal to the vector's magnitude squared: 
+
+`V•V = |V|^2`, or: 
 ```python
 def magnitude(vector):
     return sqrt(sum([v**2 for v in vector])
@@ -263,7 +276,7 @@ By turning any angle θ and traveling 1 unit, we'll reach the edge of the circle
 
 In everyday life, we usually measure angles in degrees; a rotation is 360 degrees, a quarter rotation is 90 degrees, etc. As you get deeper into math, you trade degrees for radians, and (try to) think of a rotation as 2π radians, a quarter rotation as π/2 radians, etc. 
 
-We could do that, but if you're the type of person who reads about math on the internet, you've probably seen arguments that π is an awkward value to use here, and we should prefer using τ (tau, which rhymes with "cow"). For a detailed argument, you can read https://tauday.com/tau-manifesto. For the short version, π is the ratio of a circle's circumference to its *diameter*, but we usually care more about its *radius*. The circumference to radius ratio is 2π, or ~6.28, or τ, and if we use this instead of π, the math becomes much more intuitive.
+We could do that, but if you're the type of person who reads about math on the internet, you've probably seen arguments that π is an awkward value to use here, and we should prefer using τ (tau, which rhymes with "cow"). For a detailed argument, you can read <a href="https://tauday.com/tau-manifesto">the Tau Manifesto</a>. For the short version, π is the ratio of a circle's circumference to its *diameter*, but we usually care more about its *radius*. The circumference to radius ratio is 2π, or ~6.28, or τ, and if we use this instead of π, the math becomes much more intuitive.
 
 τ/10 is ~0.628, and τ/10 radians formally represents "the angle which circumscribes an arc of a circle such that the arc is 0.628 times the length of the radius". An angle of τ circumscribes the whole circle, so the arc it forms is the circumference; the ratio of that circumference to its radius is, by definition, τ. 
 
@@ -296,16 +309,19 @@ In this formula, capital `C` represents the angle between sides a and b, and opp
 To demonstrate the Law of Cosines on an obtuse triangle, imagine it's a subdivision of a hypothetical right triangle. 
 
 By the Pythagorean Theorem:
+
 `a^2 = y^2 + (b+x)^2`, so
 
 `y^2 = a^2 - (b+x)^2`
 
 By the right triangle definition of a cosine:
+
 `cos(C) = (b+x) / a`, so
 
 `x = a * cos(C) - b`
 
 Also by the Pythagorean Theorem:
+
 `c^2 = y^2 + x^2`, so
 
 `c^2 = a^2 - (b+x)^2 + x^2` (substitute y^2)
@@ -327,21 +343,25 @@ Also by the Pythagorean Theorem:
 Similarly, we can think of an acute triangle as being made up of two right triangles. 
 
 By the right triangle definition of Cosine:
+
 `cos(C) = w / a`, so
 
 `w = a * cos(C)`
 
 Since we've divided side `b` into `w + x`, by definition:
+
 `x = b - w`, so
 
 `x = b - a * cos(C)` (substitute w)
 
 By the right triangle definition of Sine:
+
 `sin(C) = y / a`, so
 
 `y = a * sin(C)`
 
 By the Pythagorean Theorem:
+
 `c^2 = x^2 + y^2`, so
 
 `c^2 = (b - a * cos(C))^2 + (a * sin(C))^2` (substitute x and y)
@@ -360,7 +380,7 @@ We've now shown that the Law of Cosines applies for all triangles, whether right
 
 <img src="/images/Vectors3.png" width="800"/>
 
-Let's revisit an example from earlier. A and B are vectors, and C is the vector that results from traveling along A then B. This means that A + B = C, which can also be expressed as C = A - B. `|C|^2` (the squared magnitude, or length, of C) can be represented as:
+Let's revisit an example from earlier. A and B are vectors, and C is the vector that results from traveling along A then B. This means that A + B = C, which can also be expressed as C = A - B. \|C\|^2` (the squared magnitude, or length, of C) can be represented as:
 
 `|C|^2 = C•C` (Demonstrated earlier)
 
@@ -374,9 +394,9 @@ By the Law of Cosines:
 
 `|A|^2 + |B|^2 - 2*|A|*|B|*cos(θ) = |C|^2`, so
 
-`|A|^2 + |B|^2 - 2*|A|*|B|*cos(θ) = |A|^2 + |B|^2 - 2*A•B` (substitute `|C|^2`)
+`|A|^2 + |B|^2 - 2*|A|*|B|*cos(θ) = |A|^2 + |B|^2 - 2*A•B` (substitute \|C\|^2`)
 
-`-2*|A|*|B|*cos(θ) = -2*A•B`  (Subtract `|A|^2 + |B|^2` from both sides)
+`-2*|A|*|B|*cos(θ) = -2*A•B`  (Subtract \|A\|^2 + \|B\|^2` from both sides)
 
 `|A|*|B|*cos(θ) = A•B` (Divide both sides by -2)
 
@@ -407,6 +427,7 @@ In two dimensions, we can visually confirm that the angle between these vectors 
 ## Putting it Together: Correlation as a Cosine
 
 Finally, we're ready to tie this all together. If X and Y are both n-dimensional vectors with a mean of 0, then the product of their magnitudes is:
+
 `|X| * |Y|` 
 
 `= stdev(X) * sqrt(n) * stdev(Y) * sqrt(n)` (since magnitude = stdev * sqrt(n))
@@ -414,11 +435,15 @@ Finally, we're ready to tie this all together. If X and Y are both n-dimensional
 `= stdev(X) * stdev(Y) * n` (substitute n = sqrt(n)^2)
 
 Using the relationship defined above:
+
 `cos(θ) = X•Y / (|X|*|Y|)`, so
 
-`cos(θ) = X•Y / (stdev(X) * stdev(Y) * n)` (substitute |X|*|Y|)
+`cos(θ) = X•Y / (stdev(X) * stdev(Y) * n)` (substitute \|X\|*\|Y\|)
 
-`X•Y / (stdev(X) * stdev(Y)` is also the result of dividing every data point in X by stdev(X) and every data point in Y by stdev(Y).Shifting the mean to 0 and dividing by both standard deviations is the same as standardizing (taking the Z Scores of) both data sets. If X and Y are already standardized, these standard deviations will be 1, so this division will have no effect. In either case, we can represent this relationship as the dot product of Z Scores, divided by the dimension of the vectors. We can call the result the "cosine of the angle between two standardized vectors", or we can call it Correlation. This is the same Correlation function we defined in Approach 1. 
+
+Note that `X•Y / (stdev(X) * stdev(Y)` is also the result of dividing every data point in X by stdev(X) and every data point in Y by stdev(Y). Shifting the mean to 0 and dividing by both standard deviations is the same as standardizing (taking the Z Scores of) both data sets. If X and Y are already standardized, these standard deviations will be 1, so this division will have no effect. 
+
+In either case, we can represent this relationship as the dot product of Z Scores, divided by the dimension of the vectors. We can call the result the "cosine of the angle between two standardized vectors", or we can call it Correlation. This is the same Correlation function we defined in Approach 1. 
 
 ```python
 def cosine_of_angle_between_vectors(x, y):
@@ -452,7 +477,7 @@ def covariance(x, y):
     return correlation(x, y) * stdev(x) * stdev(y)
 ```
 
-This makes it easier to think through the properties of covariance, like why its upper bound is the product of both vectors' standard deviations. It also exposes the fundamental strangeness of this as a measurement, and why it's so rarely useful. Some textbooks present Variance as a special case of Covariance, in an attempt to make Covariance seem more fundamental than it actually is. It is true that `covariance(x, x) = variance(x)`, but once you've seen this formula, that's not a very interesting result:
+This makes it easier to think through the properties of covariance, like why its upper bound is the product of both vectors' standard deviations. It also exposes the fundamental strangeness of this as a measurement, and why it's so rarely useful. Some textbooks present Variance as a special case of Covariance, in an attempt to make Covariance seem more fundamental than it actually is. It is true that variance is the covariance of a vector with itself, but once you've seen this formula, that's not a very interesting result:
 
 `covariance(x, x)` 
 
