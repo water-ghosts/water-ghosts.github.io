@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "First Class Functions, Closures, and Decorators"
+title:  "Non-Stats: First Class Functions, Closures, and Decorators"
 date:   2022-09-12 23:28:05 -0700
 categories: jekyll update
 ---
@@ -324,4 +324,4 @@ square(5);    // Logs "Function call # 3"
 
 ## Conclusion
 
-In conclusion, Computer Science is a land of contrasts, and Laura should use this knowledge to get a better job 🙂
+In conclusion, Computer Science is a land of contrasts.
