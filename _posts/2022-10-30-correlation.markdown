@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "3) Covariance and Correlation"
-date:   2022-10-30 00:14:05 -0700
+date:   2022-10-31 12:14:05 -0700
 categories: jekyll update
 ---
 
@@ -41,9 +41,12 @@ Since the dot product is a series of multiplications, most of the properties of 
 If you multiply each value in one of the datasets by a constant, the dot product will also be multiplied by that constant:
 
 `[x1, x2, x3] • [c*y1, c*y2, c*y3]`
-`(x1 * c * y1) + (x2 * c * y2) + (x3 * c * y3)`
-`c * (x1 * y1 + x2 * y2 + x3 * y3)` (Factor out c)
-`c * ([x1, x2, x3] • [y1, y2, y3])`
+
+`= (x1 * c * y1) + (x2 * c * y2) + (x3 * c * y3)`
+
+`= c * (x1 * y1 + x2 * y2 + x3 * y3)` (Factor out c)
+
+`= c * ([x1, x2, x3] • [y1, y2, y3])`
 
 Dot products also expand the same way as tradition multiplication. That is,
 `(a+b)•(c+d) = a•c + a•d + b•c + d•c`. This is because, for each individual product: `(a1+b1) * (c1+d1) = a1*c1 + a1*d1 + b1*c1 + b1*d1`.
@@ -239,7 +242,9 @@ If we convert our units to "hypotenuse lengths", where the length of the hypoten
 This last relationship is not just a trick of the units. For any values o, a, and h:
 
 `cos(θ)^2 = a^2 / h^2`
-`sin(θ)^2 = o^2 / h^2`
+
+`sin(θ)^2 = o^2 / h^2`, so
+
 `cos(θ)^2 + sin(θ)^2 + = (a^2 + o^2) / h^2`
 
 Since the Pythagorean Theorem tells us `a^2 + o^2 = h^2` for any right triangle, this ratio will always equal 1.
@@ -292,19 +297,27 @@ To demonstrate the Law of Cosines on an obtuse triangle, imagine it's a subdivis
 
 By the Pythagorean Theorem:
 `a^2 = y^2 + (b+x)^2`, so
+
 `y^2 = a^2 - (b+x)^2`
 
 By the right triangle definition of a cosine:
 `cos(C) = (b+x) / a`, so
+
 `x = a * cos(C) - b`
 
 Also by the Pythagorean Theorem:
 `c^2 = y^2 + x^2`, so
+
 `c^2 = a^2 - (b+x)^2 + x^2` (substitute y^2)
+
 `c^2 = a^2 - (b^2 + 2*b*x + x^2) + x^2` (expand (b+x)^2)
+
 `c^2 = a^2 - b^2 - 2*b*x` (simplified)
+
 `c^2 = a^2 - b^2 - 2*b*(a*cos(C) - b)` (substitute x)
+
 `c^2 = a^2 - b^2 - 2*b*a*cos(C) + 2*b^2` (distribute -2*b)
+
 `c^2 = a^2 + b^2 - 2 * a * b * cos(C)` (simplified, this is the Law of Cosines) 
 
 ### The Law of Cosines for Acute Triangles
@@ -315,22 +328,30 @@ Similarly, we can think of an acute triangle as being made up of two right trian
 
 By the right triangle definition of Cosine:
 `cos(C) = w / a`, so
+
 `w = a * cos(C)`
 
 Since we've divided side `b` into `w + x`, by definition:
 `x = b - w`, so
+
 `x = b - a * cos(C)` (substitute w)
 
 By the right triangle definition of Sine:
 `sin(C) = y / a`, so
+
 `y = a * sin(C)`
 
 By the Pythagorean Theorem:
 `c^2 = x^2 + y^2`, so
+
 `c^2 = (b - a * cos(C))^2 + (a * sin(C))^2` (substitute x and y)
+
 `c^2 = b^2 - 2*a*b*cos(C) + a^2 * (cosC)^2 + a^2 * (sin(C))^2 ` (expand the squares)
+
 `c^2 = b^2 - 2*a*b*cos(C) + a^2 * (sin(C)^2 * cos(C)^2)` (factor out the a^2 term)
+
 `c^2 = b^2 - 2*a*b*cos(C) + a^2 * (1)` (simplify sin^2 + cos^2 = 1)
+
 `c^2 = a^2 + b^2 - 2 * a * b * cos(C)` (rearranged, this is the Law of Cosines)
 
 We've now shown that the Law of Cosines applies for all triangles, whether right, obtuse, or acute.
@@ -342,15 +363,23 @@ We've now shown that the Law of Cosines applies for all triangles, whether right
 Let's revisit an example from earlier. A and B are vectors, and C is the vector that results from traveling along A then B. This means that A + B = C, which can also be expressed as C = A - B. `|C|^2` (the squared magnitude, or length, of C) can be represented as:
 
 `|C|^2 = C•C` (Demonstrated earlier)
+
 `= (A-B)•(A-B)` (Substitute C = A - B)
+
 `= A•A + B•B - 2 * A•B` (Dot product expansion works like normal multiplication)
+
 `= |A|^2 + |B|^2 - 2*A•B` (Replace dot products with magnitudes squared)
 
 By the Law of Cosines:
+
 `|A|^2 + |B|^2 - 2*|A|*|B|*cos(θ) = |C|^2`, so
-`|A|^2 + |B|^2 - 2*|A|*|B|*cos(θ) = |A|^2 + |B|^2 - 2*A•B` (substitute |C|^2)
-`-2*|A|*|B|*cos(θ) = -2*A•B`  (Subtract |A|^2 + |B|^2 from both sides)
+
+`|A|^2 + |B|^2 - 2*|A|*|B|*cos(θ) = |A|^2 + |B|^2 - 2*A•B` (substitute `|C|^2`)
+
+`-2*|A|*|B|*cos(θ) = -2*A•B`  (Subtract `|A|^2 + |B|^2` from both sides)
+
 `|A|*|B|*cos(θ) = A•B` (Divide both sides by -2)
+
 `cos(θ) = A•B / (|A|*|B|)` (Rearrange terms)
 
 In other words, if you divide the dot product of two vectors by the product of their magnitudes, the result is the cosine of the angle between them. If both vectors are the same, the angle between them is 0, and the cosine of 0 (the x position after 0 turns) is `cos(0) = (A•A / |A|^2) = 1`.
@@ -379,11 +408,14 @@ In two dimensions, we can visually confirm that the angle between these vectors 
 
 Finally, we're ready to tie this all together. If X and Y are both n-dimensional vectors with a mean of 0, then the product of their magnitudes is:
 `|X| * |Y|` 
+
 `= stdev(X) * sqrt(n) * stdev(Y) * sqrt(n)` (since magnitude = stdev * sqrt(n))
+
 `= stdev(X) * stdev(Y) * n` (substitute n = sqrt(n)^2)
 
 Using the relationship defined above:
 `cos(θ) = X•Y / (|X|*|Y|)`, so
+
 `cos(θ) = X•Y / (stdev(X) * stdev(Y) * n)` (substitute |X|*|Y|)
 
 `X•Y / (stdev(X) * stdev(Y)` is also the result of dividing every data point in X by stdev(X) and every data point in Y by stdev(Y).Shifting the mean to 0 and dividing by both standard deviations is the same as standardizing (taking the Z Scores of) both data sets. If X and Y are already standardized, these standard deviations will be 1, so this division will have no effect. In either case, we can represent this relationship as the dot product of Z Scores, divided by the dimension of the vectors. We can call the result the "cosine of the angle between two standardized vectors", or we can call it Correlation. This is the same Correlation function we defined in Approach 1. 
@@ -423,8 +455,11 @@ def covariance(x, y):
 This makes it easier to think through the properties of covariance, like why its upper bound is the product of both vectors' standard deviations. It also exposes the fundamental strangeness of this as a measurement, and why it's so rarely useful. Some textbooks present Variance as a special case of Covariance, in an attempt to make Covariance seem more fundamental than it actually is. It is true that `covariance(x, x) = variance(x)`, but once you've seen this formula, that's not a very interesting result:
 
 `covariance(x, x)` 
+
 `= correlation(x, x) * stdev(x) * stdev(x)` 
+
 `= 1 * stdev(x)^2` 
+
 `= variance(x)` 
 
 You'll rarely see Covariance in practice, and the few times you do, you can use this formula to reorient around correlation. One of the (very) few places I have seen it used is in β (Beta), a financial metric that describes how a stock moves relative to the overall market. This is traditionally defined as `β = covariance(stock, market) / variance(market)`, but it can also be expressed as `β = correlation(stock, market) * stdev(stock) / stdev(market)`, which is arguably clearer.
